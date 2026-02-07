@@ -17,29 +17,20 @@ import { getJsonRpcFullnodeUrl } from "@mysten/sui/jsonRpc";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
   
-  // Load data from JSON files
+  // Load dWallet data from JSON file
   const DWALLET_RESULT_FILE = process.env.DWALLET_RESULT_FILE || path.resolve(__dirname, '..', 'IkaSetups', 'output', 'dwallet_result.json');
-  const PRESIGN_RESULT_FILE = process.env.PRESIGN_RESULT_FILE || path.resolve(__dirname, '..', 'IkaSetups', 'output', 'presign_result.json');
   console.log(`[Config] Loading dWallet data from: ${DWALLET_RESULT_FILE}`);
-  console.log(`[Config] Loading Presign data from: ${PRESIGN_RESULT_FILE}`);
 
   let dwalletData: any;
-  let presignResultData: any;
   try {
       const dwalletFileContent = fs.readFileSync(DWALLET_RESULT_FILE, 'utf-8');
       dwalletData = JSON.parse(dwalletFileContent);
       console.log(`[Config] Successfully loaded dWallet data from file`);
-      
-      const presignFileContent = fs.readFileSync(PRESIGN_RESULT_FILE, 'utf-8');
-      presignResultData = JSON.parse(presignFileContent);
-      console.log(`[Config] Successfully loaded Presign data from file`);
   } catch (error) {
       throw new Error(`Failed to load data files: ${error}`);
   }
 
-  // Extract IDs from JSON files
-  const dWalletObjectID = dwalletData.dWalletObjectID || presignResultData.dWalletObjectID;
-  const presignId = presignResultData.presignId;
+  const dWalletObjectID = dwalletData.dWalletObjectID;
   const testnetIkaCoinType = '0x1f26bb2f711ff82dcda4d02c77d5123089cb7f8418751474b9fb744ce031526a::ika::IKA';
   const senderAddress = "0x854ec4225b6fa32572f50e622147ef6cf3c6eaa390f6b9c100afa3f1ae76291d";
 
@@ -79,7 +70,8 @@ const __dirname = path.dirname(__filename);
     ikaClient: IkaClient,
     unsignedBytes: Uint8Array,
     executeTransaction: (tx: Transaction) => Promise<any>,
-    signerAddress: string
+    signerAddress: string,
+    presignId: string,
   ) {
     const tx = new Transaction();
     
