@@ -34,8 +34,8 @@ async function main() {
   const usdc = new ethers.Contract(USDC, usdcAbi, wallet);
   const core = new ethers.Contract(CORE_DEPOSIT_WALLET, coreDepositAbi, wallet);
 
-  // 1 USDC (6 decimals)
-  const amount = 1_000_000n;
+  // 10 USDC (6 decimals)
+  const amount = 10_000_000n;
 
   // Choose destination:
   const DEST_PERPS = 0; // perps
